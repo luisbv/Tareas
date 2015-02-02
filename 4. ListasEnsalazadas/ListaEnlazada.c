@@ -2,6 +2,12 @@
 #include <math.h> // inicializar pseudoaleatorio
 #include <stdlib.h> // malloc & free
 
+
+#define AGREGAR 1
+#define ELIMINAR 2
+#define CONSULTAR 3
+#define SALIR 0
+
 #define MAXIMO 100
 
 struct elemento {
@@ -68,7 +74,6 @@ void imprimeTodoReversa(lista* cual){
       temp = (elem*)malloc(sizeof(elem));
       temp->valor = actual->valor;
       temp->sig = NULL;
-      //printf("Temp: %d\n",temp->valor);
       
       agregarAlInicio(reversa, temp);
       actual = actual->sig;
@@ -99,7 +104,6 @@ void agregarOrden(lista* alCual, elem* queCosa){
         while (actual != NULL){
             //printf("Actual: %d\n",actual->valor);
             if (actual->sig->valor > queCosa->valor) {
-                //Si funciona pero se inserta uno despues
                 printf("Agrego %d entre %d y %d\n", queCosa->valor, actual->valor, actual->sig->valor);
                 temp = actual->sig;
                 
@@ -127,12 +131,13 @@ void buscarElemento(lista* alCual, elem* queCosa){
         while (actual != NULL){
             //printf("Actual: %d\n",actual->valor);
             if (actual->valor == queCosa->valor) {
-                printf("Elemento %d en posicion %d\n", queCosa->valor, posicion);
+                printf(" %d en posicion %d\n", queCosa->valor, posicion);
                 break;
             }
             actual = actual->sig;
 	    posicion ++;
         }
+	printf("El elemento %d no esta en la lista\n",queCosa->valor);
     }
 }
 
@@ -148,97 +153,107 @@ void eliminarElemento(lista* alCual, elem* queCosa){
 	int posicion = 0;
         while (actual != NULL){
            
-            if (actual->sig->valor == queCosa->valor) {
-                printf("Elemento %d en posicion %d\n", queCosa->valor, posicion+1);
-		actual->sig = actual->sig->sig;
+            if (actual->sig == NULL) {
+	      printf("%d no esta en la lista\n",queCosa->valor);
+	      break;
+            }else if (actual->sig->valor == queCosa->valor){
+	      printf("%d en pos %d\n", queCosa->valor, posicion+1);
+	      actual->sig = actual->sig->sig;
 	  
-                break;
-            }
+	      break;
+	      
+	     
+	    }
             actual = actual->sig;
 	    posicion ++;
         }
+	
     }
 }
+
+void combinarListas(lista* lista1, lista* lista2, lista* listas){
+  
+  listas->inicio = lista1->inicio;
+  
+  listas->final = lista1->final;
+
+  //listas->final->sig = lista2->inicio;
+  //listas->final = lista2->final;
+  free(lista1);
+  free(lista2);
+}
+
 
 
 int main(int argv, char** args){
     
-    lista* l = (lista*)malloc(sizeof(lista));
+  lista* l = (lista*)malloc(sizeof(lista));
+  
+  l->inicio = NULL;
     
-    l->inicio = NULL;
+  l->final = NULL;
+  
+  int r, repet = 30;
     
-    l->final = NULL;
+  
+  elem* e = NULL;
+  elem* t = NULL;
+  
     
-    int r, repet = 20;
+  srand(time(0));
     
-    
-    elem* e = NULL;
-    elem* t = NULL;
-    
-    
-    srand(time(0));
-    
-    for (r = 0; r < repet;r++){
+  for (r = 0; r < repet;r++){
 
-        e = (elem*)malloc(sizeof(elem));
+    e = (elem*)malloc(sizeof(elem));
     
-        //e->valor = 1 + rand() % MAXIMO;
-        e->valor = r;
-        e->sig = NULL;
-        if (r % 2 == 0) {
-            //printf("Agrego inicio\n");
-            //agregarAlInicio(l,e);
-        } else {
-            printf("Agrego final\n");
-            agregarAlFinal(l,e);
-            imprimeTodo(l);
-        }
-        
-        
-        
+    e->valor = 1 + rand() % MAXIMO;
+    //e->valor = r;
+    //printf("Elemento %d repeticion %d\n", e->valor, r);
+    e->sig = NULL;
+    if (r % 2 == 0) {
+      printf("A %d Inicio. ", e->valor);
+      agregarAlInicio(l,e);
+      imprimeTodo(l);
+    } else if (r % 3 == 0) {
+      printf("A %d Final. ", e->valor);
+      agregarAlFinal(l,e);
+      imprimeTodo(l);
+    } else if (r % 5 == 0){
+      printf("A %d Orden. ", e->valor);
+      //agregarOrden(l, e);
+      imprimeTodo(l);
+      
+    } else if (r % 7 == 0){
+      printf("B ", e->valor);
+      buscarElemento(l, e);
+    } else{
+      printf("E ", e->valor);
+      eliminarElemento(l,e);
     }
+        
+        
+        
+  }
     
-    
-    e = (elem*)malloc(sizeof(elem));
-    
-    e->valor = 2;
-    e->sig = NULL;
-    
-    printf("Agregar en orden: %d\n", e->valor);
-    agregarOrden(l, e);
-    
-    imprimeTodo(l);
-    
-    
-    e = (elem*)malloc(sizeof(elem));
-    
-    e->valor = 10;
-    e->sig = NULL;
-    
-    printf("Agregar en orden: %d\n", e->valor);
-    agregarOrden(l, e);
+  
+					    
+  imprimeTodo(l);
 
-    e = (elem*)malloc(sizeof(elem));
-    
-    e->valor = 10;
-    e->sig = NULL;
-     
-    
-    buscarElemento(l,e);
+  imprimeTodoReversa(l);
 
-    
-    e = (elem*)malloc(sizeof(elem));
-    
-    e->valor = 10;
-    e->sig = NULL;
-    
-    
-    eliminarElemento(l, e);
-    
-    imprimeTodo(l);
+  lista* l1 = (lista*)malloc(sizeof(lista));
+  l1->inicio = l->inicio;
+  l1->final = l->final;
 
-    imprimeTodoReversa(l);
-    return 0;
+  lista* juntas = (lista*)malloc(sizeof(lista));
+  juntas->inicio = NULL;
+  juntas->final = NULL;
+
+  printf("Combinar listas\n");
+  combinarListas(l,l1,juntas);
+  imprimeTodo(juntas);
+  
+  return 0;
 }
 
 
