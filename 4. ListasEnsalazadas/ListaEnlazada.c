@@ -67,7 +67,6 @@ void agregarOrden(lista* alCual, elem* queCosa){
         //printf("ya esta alguien ahi\n");
         elem* temp = NULL;
         elem* actual = alCual->inicio;
-        elem* anterior = NULL;
         while (actual != NULL){
             //printf("Actual: %d\n",actual->valor);
             if (actual->sig->valor > queCosa->valor) {
@@ -86,6 +85,32 @@ void agregarOrden(lista* alCual, elem* queCosa){
 
     }
 }
+
+
+
+void buscarElemento(lista* alCual, elem* queCosa){
+    if(alCual->inicio == NULL ){
+        printf("No hay elementos en la lista para buscar\n");
+    }else{
+	 //printf("ya esta alguien ahi\n");
+        elem* temp = NULL;
+        elem* actual = alCual->inicio;
+	int posicion = 0;
+        while (actual != NULL){
+            //printf("Actual: %d\n",actual->valor);
+            if (actual->valor == queCosa->valor) {
+                printf("Elemento %d en posicion %d\n", queCosa->valor, posicion);
+                break;
+            }
+            actual = actual->sig;
+	    posicion ++;
+        }
+    }
+}
+
+
+
+
 int main(int argv, char** args){
     
     lista* l = (lista*)malloc(sizeof(lista));;
@@ -142,7 +167,15 @@ int main(int argv, char** args){
     
     printf("Agregar en orden: %d\n", e->valor);
     agregarOrden(l, e);
+
+    e = (elem*)malloc(sizeof(elem));
     
+    e->valor = 10;
+    e->sig = NULL;
+     
+    
+    buscarElemento(l,e);
+
     imprimeTodo(l);
     
     return 0;
