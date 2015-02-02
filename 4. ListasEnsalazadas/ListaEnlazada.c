@@ -30,6 +30,16 @@ void imprimeTodo(lista* cual){
 }
 
 
+void imprimeTodoReversa(lista* cual){
+    elem* final = cual->final;
+    printf("R = [");
+    while (final != NULL){
+        printf(" %d", actual->valor);
+        actual = actual->sig;
+    }
+    printf(" ]\n");
+}
+
 void agregarAlInicio(lista* alCual, elem* queCosa){
     if(alCual->inicio == NULL ){
         //printf("aun no hay nadie\n");
@@ -77,7 +87,6 @@ void agregarOrden(lista* alCual, elem* queCosa){
                 actual->sig = queCosa;
                 actual->sig->sig = temp;
                 
-                
                 break;
             }
             actual = actual->sig;
@@ -109,6 +118,28 @@ void buscarElemento(lista* alCual, elem* queCosa){
 }
 
 
+
+void eliminarElemento(lista* alCual, elem* queCosa){
+    if(alCual->inicio == NULL ){
+        printf("No hay elementos en la lista para eliminar\n");
+    }else{
+	 //printf("ya esta alguien ahi\n");
+        
+        elem* actual = alCual->inicio;
+	int posicion = 0;
+        while (actual != NULL){
+           
+            if (actual->sig->valor == queCosa->valor) {
+                printf("Elemento %d en posicion %d\n", queCosa->valor, posicion+1);
+		actual->sig = actual->sig->sig;
+	  
+                break;
+            }
+            actual = actual->sig;
+	    posicion ++;
+        }
+    }
+}
 
 
 int main(int argv, char** args){
@@ -176,6 +207,15 @@ int main(int argv, char** args){
     
     buscarElemento(l,e);
 
+    
+    e = (elem*)malloc(sizeof(elem));
+    
+    e->valor = 10;
+    e->sig = NULL;
+    
+    
+    eliminarElemento(l, e);
+    
     imprimeTodo(l);
     
     return 0;
