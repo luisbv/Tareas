@@ -30,15 +30,6 @@ void imprimeTodo(lista* cual){
 }
 
 
-void imprimeTodoReversa(lista* cual){
-    elem* final = cual->final;
-    printf("R = [");
-    while (final != NULL){
-        printf(" %d", actual->valor);
-        actual = actual->sig;
-    }
-    printf(" ]\n");
-}
 
 void agregarAlInicio(lista* alCual, elem* queCosa){
     if(alCual->inicio == NULL ){
@@ -66,6 +57,34 @@ void agregarAlFinal(lista* alCual, elem* queCosa){
 }
 
 
+void imprimeTodoReversa(lista* cual){
+    elem* actual = cual->inicio;
+    elem* temp = NULL;
+    lista* reversa = (lista*)malloc(sizeof(lista));
+    reversa->inicio = NULL;
+    reversa->final = NULL;
+
+    while (actual != NULL){
+      temp = (elem*)malloc(sizeof(elem));
+      temp->valor = actual->valor;
+      temp->sig = NULL;
+      //printf("Temp: %d\n",temp->valor);
+      
+      agregarAlInicio(reversa, temp);
+      actual = actual->sig;
+    }
+    free(temp);
+
+    elem* actualr = reversa->inicio;
+    printf("R = [");
+    while (actualr != NULL){
+
+        printf(" %d", actualr->valor);
+        actualr = actualr->sig;
+    }
+    printf(" ]\n");
+    free(reversa);
+}
 
 
 void agregarOrden(lista* alCual, elem* queCosa){
@@ -144,7 +163,7 @@ void eliminarElemento(lista* alCual, elem* queCosa){
 
 int main(int argv, char** args){
     
-    lista* l = (lista*)malloc(sizeof(lista));;
+    lista* l = (lista*)malloc(sizeof(lista));
     
     l->inicio = NULL;
     
@@ -217,7 +236,8 @@ int main(int argv, char** args){
     eliminarElemento(l, e);
     
     imprimeTodo(l);
-    
+
+    imprimeTodoReversa(l);
     return 0;
 }
 
