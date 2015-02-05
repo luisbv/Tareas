@@ -198,24 +198,31 @@ void combinarListas(lista* lista1, lista* lista2, lista* listas){
 }
 
 void bubbleSort(lista* list){
-  int c = 0;
+  int c = -1;
   elem* actual = list->inicio;
-  elem* temp = NULL;
-  while (actual != NULL){
+  int temp = 0;
+  while (c!=0){
+    c = 0;
+    //printf("Entro primer while\n");
+    while (actual != NULL){
+      //printf("Entro segundo while\n");
+      //printf("%d\n",c);
+      if(actual->sig == NULL){
+	break;
+	}
+      if(actual->valor > actual->sig->valor){
+	//printf("Entro if\n",c);
+	temp = actual->sig->valor;
+	actual->sig->valor = actual->valor;
+	actual->valor = temp;
+	c += 1;
+      }
+      actual = actual->sig;
+    }
     
-    if(actual->valor > actual->sig->valor ){
-      temp->valor = actual->valor;
-      temp->sig = actual->sig->sig;
-      actual->valor = temp->valor;
-      actual->sig = temp->sig;
-      c ++;
-    }
-    actual = actual->sig;
-    if (c != 0){
-      c = 0;
-    }else{
-      break;
-    }
+    //printf("Salio segundo while\n");
+    //imprimeTodo(list);
+    actual = list->inicio;
   }
 }
 
@@ -284,12 +291,13 @@ int main(int argv, char** args){
   juntas->inicio = NULL;
   juntas->final = NULL;
 
-  printf("Combinar listas\n");
-  combinarListas(l,l,juntas);
-  imprimeTodo(juntas);
+  //printf("Combinar listas\n");
+  //combinarListas(l,l,juntas);
+  //imprimeTodo(juntas);
 
+  printf("Lista ordenada (Bubble Sort)\n");
   bubbleSort(l);
-  imprimeTodo(juntas);
+  imprimeTodo(l);
   
   return 0;
 }
