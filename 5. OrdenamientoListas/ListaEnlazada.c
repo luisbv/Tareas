@@ -226,6 +226,29 @@ void bubbleSort(lista* list){
   }
 }
 
+
+void selectionSort(lista* list){
+  elem* i = list->inicio;
+  int t = 0;
+  int menor = 1000000;
+  int k = 0;
+  while (i != list->final){
+
+    while (i != NULL){
+      if(i->valor < menor){
+	t = i->valor;
+	menor = i->valor;
+      }
+      i = i->sig;
+    }
+    
+    //printf("Salio segundo while\n");
+    //imprimeTodo(list);
+    actual = list->inicio;
+  }
+}
+
+
 int main(int argv, char** args){
     
   lista* l = (lista*)malloc(sizeof(lista));
