@@ -174,14 +174,14 @@ void combinarListas(lista* lista1, lista* lista2, lista* listas){
     agregarAlInicio(listas, actual1);
     actual1 = actual1->sig;
   }
-
+  /*
   elem* actual2 = lista2->inicio;
 
   while (actual2 != NULL){
     agregarAlInicio(listas, actual2);
     actual2 = actual2->sig;
   }
-
+  */
 
   //listas->inicio = lista1->inicio;
   
@@ -197,7 +197,27 @@ void combinarListas(lista* lista1, lista* lista2, lista* listas){
   //free(lista2);
 }
 
-
+void bubbleSort(lista* list){
+  int c = 0;
+  elem* actual = list->inicio;
+  elem* temp = NULL;
+  while (actual != NULL){
+    
+    if(actual->valor > actual->sig->valor ){
+      temp->valor = actual->valor;
+      temp->sig = actual->sig->sig;
+      actual->valor = temp->valor;
+      actual->sig = temp->sig;
+      c ++;
+    }
+    actual = actual->sig;
+    if (c != 0){
+      c = 0;
+    }else{
+      break;
+    }
+  }
+}
 
 int main(int argv, char** args){
     
@@ -266,6 +286,9 @@ int main(int argv, char** args){
 
   printf("Combinar listas\n");
   combinarListas(l,l,juntas);
+  imprimeTodo(juntas);
+
+  bubbleSort(l);
   imprimeTodo(juntas);
   
   return 0;
