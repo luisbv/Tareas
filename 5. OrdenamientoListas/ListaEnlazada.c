@@ -228,101 +228,126 @@ void bubbleSort(lista* list){
 
 
 void selectionSort(lista* list){
-  elem* i = list->inicio;
-  int t = 0;
-  int menor = 1000000;
-  int k = 0;
-  while (i != list->final){
-
-    while (i != NULL){
-      if(i->valor < menor){
-	t = i->valor;
-	menor = i->valor;
-      }
-      i = i->sig;
-    }
+    elem* i = list->inicio;
+    elem* m = list->inicio;
+    elem* actual = list->inicio;
+    int pos,k,p, temp=0;
     
-    //printf("Salio segundo while\n");
-    //imprimeTodo(list);
-    actual = list->inicio;
-  }
+  
+    int menor;
+    pos = 0;
+    while (i != NULL){
+    //while (i != NULL){
+        k = 0;
+        p = 0;
+	
+        //Encontrar el menor
+        menor = 1000000;
+        while (m != NULL){
+            if(m->valor < menor){
+                menor = m->valor;
+                k = p;
+            }
+            m = m->sig;
+            p++;
+        }
+        
+            
+        //Recorrer la lista hasta encontrar la posicion del menor
+        pos = 0;
+        while (pos < k){
+            actual = actual->sig;
+            pos++;
+        }
+    
+        //intercambiar los valores entre k e i
+        temp = actual->valor;
+            
+        actual->valor = i->valor;
+        i->valor = temp;
+
+	
+        m = i->sig;
+	actual = i->sig;
+        i = i->sig;
+        
+    }
 }
 
 
 int main(int argv, char** args){
     
-  lista* l = (lista*)malloc(sizeof(lista));
+    lista* l = (lista*)malloc(sizeof(lista));
   
-  l->inicio = NULL;
+    l->inicio = NULL;
     
-  l->final = NULL;
+    l->final = NULL;
   
-  int r, repet = 30;
+    int r, repet = 30;
     
   
-  elem* e = NULL;
-  elem* t = NULL;
+    elem* e = NULL;
+    elem* t = NULL;
   
     
-  srand(time(0));
+    srand(time(0));
     
-  for (r = 0; r < repet;r++){
+    for (r = 0; r < repet;r++){
 
-    e = (elem*)malloc(sizeof(elem));
+        e = (elem*)malloc(sizeof(elem));
     
-    e->valor = 1 + rand() % MAXIMO;
-    //e->valor = r;
-    //printf("Elemento %d repeticion %d\n", e->valor, r);
-    e->sig = NULL;
-    if (r % 2 == 0) {
-      printf("A %d Inicio. ", e->valor);
-      agregarAlInicio(l,e);
-      imprimeTodo(l);
-    } else if (r % 3 == 0) {
-      printf("A %d Final. ", e->valor);
-      agregarAlFinal(l,e);
-      imprimeTodo(l);
-    } else if (r % 5 == 0){
-      printf("A %d Orden. ", e->valor);
-      //agregarOrden(l, e);
-      imprimeTodo(l);
+        e->valor = 1 + rand() % MAXIMO;
+
+        e->sig = NULL;
+        if (r % 2 == 0) {
+            printf("A %d Inicio. ", e->valor);
+            agregarAlInicio(l,e);
+            imprimeTodo(l);
+        } else if (r % 3 == 0) {
+            printf("A %d Final. ", e->valor);
+            agregarAlFinal(l,e);
+            imprimeTodo(l);
+        } else if (r % 5 == 0){
+            printf("A %d Orden. ", e->valor);
+            //agregarOrden(l, e);
+            imprimeTodo(l);
       
-    } else if (r % 7 == 0){
-      printf("B ", e->valor);
-      buscarElemento(l, e);
-    } else{
-      printf("E ", e->valor);
-      eliminarElemento(l,e);
+        } else if (r % 7 == 0){
+            printf("B ", e->valor);
+            buscarElemento(l, e);
+        } else{
+            printf("E ", e->valor);
+            eliminarElemento(l,e);
+        }
     }
-        
-        
-        
-  }
     
-  
-					    
-  imprimeTodo(l);
+    imprimeTodo(l);
 
-  imprimeTodoReversa(l);
+    imprimeTodoReversa(l);
 
-  //lista* l1 = (lista*)malloc(sizeof(lista));
-  //l1->inicio = l->inicio;
-  //l1->final = l->final;
+    //lista* l1 = (lista*)malloc(sizeof(lista));
+    //l1->inicio = l->inicio;
+    //l1->final = l->final;
  
   
-  lista* juntas = (lista*)malloc(sizeof(lista));
-  juntas->inicio = NULL;
-  juntas->final = NULL;
+    lista* juntas = (lista*)malloc(sizeof(lista));
+    juntas->inicio = NULL;
+    juntas->final = NULL;
 
-  //printf("Combinar listas\n");
-  //combinarListas(l,l,juntas);
-  //imprimeTodo(juntas);
-
-  printf("Lista ordenada (Bubble Sort)\n");
-  bubbleSort(l);
-  imprimeTodo(l);
+    //printf("Combinar listas\n");
+    //combinarListas(l,l,juntas);
+    //imprimeTodo(juntas);
+    printf("Lista ordenada (Selection Sort)\n");
+    selectionSort(l);
+    imprimeTodo(l);
+    
+    printf("Lista ordenada (Bubble Sort)\n");
+    bubbleSort(l);
+    imprimeTodo(l);
   
-  return 0;
+  
+  
+    return 0;
 }
 
 
