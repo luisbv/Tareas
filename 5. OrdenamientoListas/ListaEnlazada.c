@@ -275,6 +275,53 @@ void selectionSort(lista* list){
 }
 
 
+void mergeSort(lista* list){
+    elem* i = list->inicio;
+    elem* m = list->inicio;
+    elem* actual = list->inicio;
+    int pos,k,p, temp=0;
+    
+  
+    int menor;
+    pos = 0;
+    while (i != NULL){
+    //while (i != NULL){
+        k = 0;
+        p = 0;
+	
+        //Encontrar el menor
+        menor = 1000000;
+        while (m != NULL){
+            if(m->valor < menor){
+                menor = m->valor;
+                k = p;
+            }
+            m = m->sig;
+            p++;
+        }
+        
+            
+        //Recorrer la lista hasta encontrar la posicion del menor
+        pos = 0;
+        while (pos < k){
+            actual = actual->sig;
+            pos++;
+        }
+    
+        //intercambiar los valores entre k e i
+        temp = actual->valor;
+            
+        actual->valor = i->valor;
+        i->valor = temp;
+
+	
+        m = i->sig;
+	actual = i->sig;
+        i = i->sig;
+        
+    }
+}
+
 int main(int argv, char** args){
     
     lista* l = (lista*)malloc(sizeof(lista));
