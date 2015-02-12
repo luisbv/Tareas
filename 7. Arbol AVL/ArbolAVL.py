@@ -90,7 +90,7 @@ class nodo:
     ''' 	
     def recorre(self, prof=0):
     	if not self.hoja:
-    		#print 'R %d -> I %d :: D %d' % (self.valor, self.izq.valor, self.der.valor)
+    		print 'R %d @ %d  ---> I %d :: D %d' % (self.valor, self.prof, self.izq.valor, self.der.valor)
         	self.izq.recorre(self.izq.prof)
         	self.der.recorre(self.izq.prof)
         	return
@@ -108,18 +108,22 @@ class nodo:
         	return
     
     
-    def sube(self, padre):
+    def sube(self):
     	if self.padre is None and self.izq.altura is not None and self.der.altura is not None:
     		self.altura = max(self.izq.altura, self.der.altura) + 1
     		return
     	elif self.padre is None and self.izq.altura is None:
     		self.izq.CalcularAltura()
     	elif self.padre is None and self.der.altura is None:
+    		self.der.CalcularAltura()
+    	elif self.izq.altura is None:
     		self.izq.CalcularAltura()
+    	elif self.der.altura is None:
+    		self.der.CalcularAltura()
     	else:
-    		self.altura = (self.izq.altura + self.der.altura)
+    		self.altura = self.izq.altura + self.der.altura
     		print '%d H %d ' % (self.valor, self.altura)
-    		self.sube(self.padre)
+    		self.padre.sube()
     		
     		
     def CalcularAltura(self):
@@ -129,35 +133,39 @@ class nodo:
         	return
         else:
         	self.altura = 1
-        	print '%d H %d' % (self.valor, self.altura)
+        	#print '%d H %d' % (self.valor, self.altura)
         	if self.padre.izq == self: #Hoja izquierda
         		if self.padre.der.hoja: # hermano es hoja
         			self.padre.der.altura = 1
-        			self.sube(self.padre)
+        			self.padre.sube()
         			return
         		else: # hermano no es hoja
-    				self.padre.der.CalcularAltura(self.padre.der.prof)
+    				self.padre.der.CalcularAltura()
     		
     		else: #Hoja derecha
     			if self.padre.izq.hoja: # hermano es hoja
     				self.padre.izq.altura = 1
-        			self.sube(self.padre)
+        			self.padre.sube()
         			return
         		else: # hermano no es hoja
-    				self.padre.izq.CalcularAltura(self.padre.izq.prof)
+    				self.padre.izq.CalcularAltura()
         	return
     
 raiz = nodo(10)
 print 'Raiz %d ' % raiz.valor
 from random import randint
-for i in xrange(20):
+for i in xrange(5):
     valor = randint(1, 100)
+    print valor
     #print raiz.buscar(valor)
     raiz.agregar(valor)
     
     #print raiz.buscar(valor)
 print
 print 'Recorrer'
-#raiz.recorre()
+raiz.recorre()
+
+print 
+print 'Altura'
 
 raiz.CalcularAltura()
