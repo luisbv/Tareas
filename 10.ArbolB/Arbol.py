@@ -1,7 +1,18 @@
+t = 4
 class nodo:
-    def __init__(self, c=None, h=None):
+    def __init__(self, c=None, h=None, t = 0):
         self.hijos = h
-        self.claves =c
+        self.claves = c
+        self.maximo = 2 * t -1
+        self.minimo = 
+
+    def lleno(self):
+        if len(self.hijos) >= 2 * t - 1
+            return True
+
+    def vacio(self):
+        if len(self.hijos) <= t - 1:
+            return True
 
     def buscar(self, valor):
         for pos in xrange(0, len(self.claves)):
@@ -13,6 +24,12 @@ class nodo:
             elif self.hijos is None:
                 return False
         return self.hijos[-1].buscar(valor)
+
+
+    def insertar(self, valor):
+        self.buscar(valor)
+
+
 
 a = nodo([5, 8, 13])
 b = nodo([22, 31, 45])
