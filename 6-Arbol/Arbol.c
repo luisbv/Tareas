@@ -30,8 +30,8 @@ int main(int argv, char** args){
   e->padre = NULL;
 
   e->hijos = (nodo**)malloc(sizeof(2*nodo));
-  e->hijos0[] = 3;
-  e->hijos0[] = 3;
+  e->hijos[0] = 3;
+  e->hijos[1] = 2;
   e->numeroDeHijos = 2;
   
   

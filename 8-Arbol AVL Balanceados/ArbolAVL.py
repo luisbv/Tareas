@@ -14,6 +14,24 @@ class nodo:
         self.der = None
         self.hoja = True
 
+    def recorre(self, prof=0):
+    	if not self.hoja:
+    		print 'R %d @ %d  ---> I %d :: D %d' % (self.valor, self.prof, self.izq.valor, self.der.valor)
+        	self.izq.recorre(self.izq.prof)
+        	self.der.recorre(self.izq.prof)
+        	return
+        else:
+        	if self.padre.izq == self:
+        		if self.padre.der.hoja:
+        			return
+        		else:
+    				self.padre.der.recorre(self.padre.der.prof)
+    		else:
+    			if self.padre.izq.hoja:
+        			return
+        		else:
+    				self.padre.izq.recorre(self.padre.izq.prof)
+        	return
 
     def buscar(self, valor):
         if self.valor  == valor:
@@ -117,14 +135,12 @@ for i in xrange(5):
     #print raiz.buscar(valor)
     raiz.agregar(valor)
 
+raiz.recorre()
 
-    #print raiz.buscar(valor)
-#print
-#print 'Recorrer'
-#raiz.recorre()
+print "Eliminar: ", valor
+raiz.eliminar(valor)
 
-#print 
-#print 'Altura'
+raiz.recorre()
 
 #raiz.CalcularAltura()
 print 'Profundidad de la raiz %d' % raiz.prof

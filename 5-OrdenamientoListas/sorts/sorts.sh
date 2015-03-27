@@ -1,0 +1,1 @@
+python sorts.py | sort -g | uniq | grep "ord" | wc -l
