@@ -71,8 +71,7 @@ int main(int argv, char** args){
         eliminar = 1 - agregar - 0.1;
         operaciones = 0;
         faltas = 0;
-        arreglo = NULL;
-        nuevo = NULL;
+        //arreglo = (int*)malloc(sizeof(int));
         for (r=0; r < repeticiones; r++){
             posicion = AUSENTE;
             #ifdef SIMULATION
@@ -269,8 +268,7 @@ int main(int argv, char** args){
         //operaciones = 0;
     }
     fclose(fp);
-    free(arreglo);
-    free(nuevo);
+    
     return 0;
 }
 
