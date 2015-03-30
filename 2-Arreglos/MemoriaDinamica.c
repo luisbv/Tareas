@@ -65,202 +65,201 @@ int main(int argv, char** args){
     }
     int a;
     int operaciones = 0;
-    for (a = 2; a < 9; a++){
-        agregar = (float)a/10;
-        
+    for (a = 2; a < 90; a++){
+        agregar = (float)a/100;
         eliminar = 1 - agregar - 0.1;
-    for (r=0; r < repeticiones; r++){
-        posicion = AUSENTE;
-        #ifdef SIMULATION
-        s = rand() % MAX;
+        for (r=0; r < repeticiones; r++){
+            posicion = AUSENTE;
+            #ifdef SIMULATION
+            s = rand() % MAX;
         
-        if (s < agregar * MAX){
-            accion = AGREGAR;
-        }
-        else if (s < (agregar + eliminar)*MAX){
-            accion = ELIMINAR;
-        }
-        else{
-            accion = CONSULTAR;
-        }
+            if (s < agregar * MAX){
+                accion = AGREGAR;
+            }
+            else if (s < (agregar + eliminar)*MAX){
+                accion = ELIMINAR;
+            }
+            else{
+                accion = CONSULTAR;
+            }
         
-        elemento = DESDE + rand() % (HASTA - DESDE + 1);
-        #endif
+            elemento = DESDE + rand() % (HASTA - DESDE + 1);
+            #endif
         
-        #ifdef MANUALTEST
-        printf("\n\n");
-        printf("Opciones: \n");
-        printf("1. Agregar \n");
-        printf("2. Eliminar \n");
-        printf("3. Consultar \n");
-        printf("0. Salir \n");
-        printf("Elija la opcion deseada: ");
-        scanf("%d", &accion);
+            #ifdef MANUALTEST
+            printf("\n\n");
+            printf("Opciones: \n");
+            printf("1. Agregar \n");
+            printf("2. Eliminar \n");
+            printf("3. Consultar \n");
+            printf("0. Salir \n");
+            printf("Elija la opcion deseada: ");
+            scanf("%d", &accion);
         
         
-        if (accion == SALIR){
-            return 0;
-        }
-        #endif
+            if (accion == SALIR){
+                return 0;
+            }
+            #endif
         
-        switch (accion) {
-            case AGREGAR:
+            switch (accion) {
+                case AGREGAR:
                 
                 
-                #ifdef MANUALTEST
-                printf("\n");
-                printf("Elemento a agregar: ");
-                scanf("%d", &elemento);
-                #endif
+                    #ifdef MANUALTEST
+                    printf("\n");
+                    printf("Elemento a agregar: ");
+                    scanf("%d", &elemento);
+                    #endif
                 
-                if (largo == 0){
-                    operaciones += 1;
-                    arreglo = (int*)malloc(inicial * sizeof(int));
-                    largo = inicial;
-                    for (p=0; p < largo; p++){
-                        arreglo[p] = DESOCUPADO;
+                    if (largo == 0){
+                        operaciones += 1;
+                        arreglo = (int*)malloc(inicial * sizeof(int));
+                        largo = inicial;
+                        for (p=0; p < largo; p++){
+                            arreglo[p] = DESOCUPADO;
+                        }
                     }
-                }
-                for (p=0; p < largo; p++){
-                    if (arreglo[p] == DESOCUPADO){
-                        arreglo[p] = elemento;
-                        posicion = p;
+                    for (p=0; p < largo; p++){
+                        if (arreglo[p] == DESOCUPADO){
+                            arreglo[p] = elemento;
+                            posicion = p;
+                            break;
+                        }
+                    }
+        
+                    if (largo > 0 && p == largo){ // no hubo desocupados
+                        operaciones += 1;
+                        nuevo = (int*)malloc(2 * largo * sizeof(int));
+                        for (p = 0; p < 2 * largo; p++){
+                            nuevo[p] = arreglo[p];
+                        }
+                        nuevo[largo] = elemento;
+                        posicion = largo;
+                        for (p = largo + 1; p < 2 * largo; p++){
+                            nuevo[p] = DESOCUPADO;
+                        }
+                        free(arreglo);
+                        arreglo = nuevo;
+                        largo *= 2;
+                    }
+        
+                    printf("A %d (%d de %d)\n", elemento, posicion, largo);
+                    break;
+                case ELIMINAR:
+                    #ifdef MANUALTEST
+                    printf("\n");
+                    printf("Elemento a eliminar: ");
+                    scanf("%d", &elemento);
+                    #endif
+                    if (largo != 0) {
+                        for (p=0; p < largo; p++){
+                            if(arreglo[p] == elemento){
+                                posicion = p;
+                                break;
+                            }
+                        }
+                    
+                        if (posicion == AUSENTE) {
+                            printf("E %d ausente\n", elemento);
+                        } else {
+                            arreglo[posicion] = ELIMINADO;
+                            printf("E %d @ %d\n", elemento, posicion);
+                        }
+                    
+                        desocupados = 0;
+                        for (p=0; p < largo; p++){
+                            if(arreglo[p] == DESOCUPADO){
+                                desocupados += 1;
+                            }
+                        }
+                    
+                        // porcentaje de desocupados
+                        pdesocupados = (float) desocupados / largo;
+                    
+                        //printf("Porcentaje Desocupados: %.2f\n", pdesocupados);
+                        if (pdesocupados > 0.75){
+                        
+                            printf("Pocos elementos. Se redujo de (%d a %d)\n", largo, largo / 2);
+                            int p1 = 0;
+                            //quitarle tamanno
+                            operaciones += 1;
+                            nuevo = (int*)malloc(largo / 2 * sizeof(int));
+                            for (p = 0; p < largo / 2; p++){
+                                nuevo[p] = DESOCUPADO;
+                            }
+                        
+                            p = 0;
+                            p1 = 0;
+                            while (p1 >= 0) {
+                            
+                                if (arreglo[p] != DESOCUPADO){
+                                    //printf("(Nuevo,%d), (Arreglo, %d)\n", p1, p);
+                                    nuevo[p1] = arreglo[p];
+                                    p++;
+                                    p1++;
+                                }else{
+                                    p++;
+                                }
+                                if (p == largo){
+                                    break;
+                                }
+                            }
+                        
+                            free(arreglo);
+                            arreglo = nuevo;
+                            largo /= 2;
+                        
+                        }
+                    
+                    }else{
+                        printf("%d NO SE PUEDE ELIMINAR. No hay elementos en el arreglo.\n", elemento);
                         break;
                     }
-                }
-        
-                if (largo > 0 && p == largo){ // no hubo desocupados
-                    operaciones += 1;
-                    nuevo = (int*)malloc(2 * largo * sizeof(int));
-                    for (p = 0; p < 2 * largo; p++){
-                        nuevo[p] = arreglo[p];
+                
+                    break;
+                default: //consultar
+                    #ifdef MANUALTEST
+                    printf("\n");
+                    printf("Elemento a consultar: ");
+                    scanf("%d", &elemento);
+                    #endif
+                    posicion = AUSENTE;
+                
+                    if (largo == 0) {
+                        printf("%d NO SE PUEDE CONSULTAR. No hay elementos en el arreglo.\n", elemento);
+                        break;
                     }
-                    nuevo[largo] = elemento;
-                    posicion = largo;
-                    for (p = largo + 1; p < 2 * largo; p++){
-                        nuevo[p] = DESOCUPADO;
-                    }
-                    free(arreglo);
-                    arreglo = nuevo;
-                    largo *= 2;
-                }
-        
-                printf("A %d (%d de %d)\n", elemento, posicion, largo);
-                break;
-            case ELIMINAR:
-                #ifdef MANUALTEST
-                printf("\n");
-                printf("Elemento a eliminar: ");
-                scanf("%d", &elemento);
-                #endif
-                if (largo != 0) {
+                
                     for (p=0; p < largo; p++){
                         if(arreglo[p] == elemento){
                             posicion = p;
                             break;
                         }
                     }
-                    
-                    if (posicion == AUSENTE) {
-                        printf("E %d ausente\n", elemento);
-                    } else {
-                        arreglo[posicion] = ELIMINADO;
-                        printf("E %d @ %d\n", elemento, posicion);
-                    }
-                    
-                    desocupados = 0;
-                    for (p=0; p < largo; p++){
-                        if(arreglo[p] == DESOCUPADO){
-                            desocupados += 1;
-                        }
-                    }
-                    
-                    // porcentaje de desocupados
-                    pdesocupados = (float) desocupados / largo;
-                    
-                    //printf("Porcentaje Desocupados: %.2f\n", pdesocupados);
-                    if (pdesocupados > 0.75){
-                        
-                        printf("Pocos elementos. Se redujo de (%d a %d)\n", largo, largo / 2);
-                        int p1 = 0;
-                        //quitarle tamanno
-                        operaciones += 1;
-                        nuevo = (int*)malloc(largo / 2 * sizeof(int));
-                        for (p = 0; p < largo / 2; p++){
-                            nuevo[p] = DESOCUPADO;
-                        }
-                        
-                        p = 0;
-                        p1 = 0;
-                        while (p1 >= 0) {
-                            
-                            if (arreglo[p] != DESOCUPADO){
-                                //printf("(Nuevo,%d), (Arreglo, %d)\n", p1, p);
-                                nuevo[p1] = arreglo[p];
-                                p++;
-                                p1++;
-                            }else{
-                                p++;
-                            }
-                            if (p == largo){
-                                break;
-                            }
-                        }
-                        
-                        free(arreglo);
-                        arreglo = nuevo;
-                        largo /= 2;
-                        
-                    }
-                    
-                }else{
-                    printf("%d NO SE PUEDE ELIMINAR. No hay elementos en el arreglo.\n", elemento);
-                    break;
-                }
-                
-                break;
-            default: //consultar
-                #ifdef MANUALTEST
-                printf("\n");
-                printf("Elemento a consultar: ");
-                scanf("%d", &elemento);
-                #endif
-                posicion = AUSENTE;
-                
-                if (largo == 0) {
-                    printf("%d NO SE PUEDE CONSULTAR. No hay elementos en el arreglo.\n", elemento);
-                    break;
-                }
-                
-                for (p=0; p < largo; p++){
-                    if(arreglo[p] == elemento){
-                        posicion = p;
-                        break;
-                    }
-                }
                 
         
-                if (posicion == AUSENTE) {
-                    printf("C %d ausente\n", elemento);
-                } else {
-                    printf("C %d @ %d\n", elemento, posicion);
-                }
-                break;
-            }
-            #ifdef DEBUG
-                printf("D");
-                if (largo <= 100){ //
-                    for (p = 0; p<largo; p++){
-                        printf(" %d ", arreglo[p]);
+                    if (posicion == AUSENTE) {
+                        printf("C %d ausente\n", elemento);
+                    } else {
+                        printf("C %d @ %d\n", elemento, posicion);
                     }
-                    printf("\n");
-                } else{
-                    printf(" Es muy grande para imprimir.\n");
+                    break;
                 }
-            #endif
-    }
-    fprintf(fp,"%.2f,%.2f,%d\n",agregar,eliminar, operaciones);
-        operaciones = 0;
+                #ifdef DEBUG
+                    printf("D");
+                    if (largo <= 100){ //
+                        for (p = 0; p<largo; p++){
+                            printf(" %d ", arreglo[p]);
+                        }
+                        printf("\n");
+                    } else{
+                        printf(" Es muy grande para imprimir.\n");
+                    }
+                #endif
+        }
+        fprintf(fp,"%.2f,%.2f,%d\n",agregar,eliminar, operaciones);
+            operaciones = 0;
     }
     fclose(fp);
     return 0;
