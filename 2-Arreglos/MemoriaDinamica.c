@@ -65,9 +65,12 @@ int main(int argv, char** args){
     }
     int a;
     int operaciones = 0;
-    for (a = 2; a < 90; a++){
+    int faltas = 0; //indicador de numero de faltas de elemento o no presente en arreglo
+    for (a = 50; a < 91; a++){
         agregar = (float)a/100;
         eliminar = 1 - agregar - 0.1;
+        operaciones = 0;
+        faltas = 0;
         for (r=0; r < repeticiones; r++){
             posicion = AUSENTE;
             #ifdef SIMULATION
@@ -144,7 +147,7 @@ int main(int argv, char** args){
                         largo *= 2;
                     }
         
-                    printf("A %d (%d de %d)\n", elemento, posicion, largo);
+                    //printf("A %d (%d de %d)\n", elemento, posicion, largo);
                     break;
                 case ELIMINAR:
                     #ifdef MANUALTEST
@@ -161,10 +164,11 @@ int main(int argv, char** args){
                         }
                     
                         if (posicion == AUSENTE) {
-                            printf("E %d ausente\n", elemento);
+                            //printf("E %d ausente\n", elemento);
+                            faltas++;
                         } else {
                             arreglo[posicion] = ELIMINADO;
-                            printf("E %d @ %d\n", elemento, posicion);
+                            //printf("E %d @ %d\n", elemento, posicion);
                         }
                     
                         desocupados = 0;
@@ -213,7 +217,7 @@ int main(int argv, char** args){
                         }
                     
                     }else{
-                        printf("%d NO SE PUEDE ELIMINAR. No hay elementos en el arreglo.\n", elemento);
+                        //printf("%d NO SE PUEDE ELIMINAR. No hay elementos en el arreglo.\n", elemento);
                         break;
                     }
                 
@@ -227,7 +231,7 @@ int main(int argv, char** args){
                     posicion = AUSENTE;
                 
                     if (largo == 0) {
-                        printf("%d NO SE PUEDE CONSULTAR. No hay elementos en el arreglo.\n", elemento);
+                        //printf("%d NO SE PUEDE CONSULTAR. No hay elementos en el arreglo.\n", elemento);
                         break;
                     }
                 
@@ -240,9 +244,10 @@ int main(int argv, char** args){
                 
         
                     if (posicion == AUSENTE) {
-                        printf("C %d ausente\n", elemento);
+                        //printf("C %d ausente\n", elemento);
+                        faltas++;
                     } else {
-                        printf("C %d @ %d\n", elemento, posicion);
+                        //printf("C %d @ %d\n", elemento, posicion);
                     }
                     break;
                 }
@@ -254,12 +259,12 @@ int main(int argv, char** args){
                         }
                         printf("\n");
                     } else{
-                        printf(" Es muy grande para imprimir.\n");
+                        //printf(" Es muy grande para imprimir.\n");
                     }
                 #endif
         }
-        fprintf(fp,"%.2f,%.2f,%d\n",agregar,eliminar, operaciones);
-            operaciones = 0;
+        fprintf(fp,"%.2f,%.2f,%d,%d\n",agregar,eliminar, operaciones,faltas);
+        //operaciones = 0;
     }
     fclose(fp);
     return 0;
