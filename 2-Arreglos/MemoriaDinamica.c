@@ -71,6 +71,8 @@ int main(int argv, char** args){
         eliminar = 1 - agregar - 0.1;
         operaciones = 0;
         faltas = 0;
+        arreglo = NULL;
+        nuevo = NULL;
         for (r=0; r < repeticiones; r++){
             posicion = AUSENTE;
             #ifdef SIMULATION
@@ -116,7 +118,7 @@ int main(int argv, char** args){
                     #endif
                 
                     if (largo == 0){
-                        operaciones += 1;
+                        operaciones++;
                         arreglo = (int*)malloc(inicial * sizeof(int));
                         largo = inicial;
                         for (p=0; p < largo; p++){
@@ -132,7 +134,7 @@ int main(int argv, char** args){
                     }
         
                     if (largo > 0 && p == largo){ // no hubo desocupados
-                        operaciones += 1;
+                        operaciones++;
                         nuevo = (int*)malloc(2 * largo * sizeof(int));
                         for (p = 0; p < 2 * largo; p++){
                             nuevo[p] = arreglo[p];
@@ -184,10 +186,10 @@ int main(int argv, char** args){
                         //printf("Porcentaje Desocupados: %.2f\n", pdesocupados);
                         if (pdesocupados > 0.75){
                         
-                            printf("Pocos elementos. Se redujo de (%d a %d)\n", largo, largo / 2);
+                            //printf("Pocos elementos. Se redujo de (%d a %d)\n", largo, largo / 2);
                             int p1 = 0;
                             //quitarle tamanno
-                            operaciones += 1;
+                            operaciones++;
                             nuevo = (int*)malloc(largo / 2 * sizeof(int));
                             for (p = 0; p < largo / 2; p++){
                                 nuevo[p] = DESOCUPADO;
@@ -267,6 +269,8 @@ int main(int argv, char** args){
         //operaciones = 0;
     }
     fclose(fp);
+    free(arreglo);
+    free(nuevo);
     return 0;
 }
 
