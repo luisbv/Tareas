@@ -6,7 +6,7 @@ N=10000
 R=100
 gcc MemoriaDinamica.c
 
-for ((i=50; i <= 90; i += 1))
+for ((i=10; i <= 90; i += 1))
 do
     for ((r=1; r <= R; r += 1))
     do
