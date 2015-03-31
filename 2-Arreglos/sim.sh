@@ -1,8 +1,15 @@
 #!/bin/bash
 
-N=1000
 
+rm *.csv
+N=10000
+R=100
 gcc MemoriaDinamica.c
 
-./a.out $N 50 >>resultados.csv
-
+for ((i=50; i <= 90; i += 1))
+do
+    for ((r=1; r <= R; r += 1))
+    do
+        ./a.out $N $i >>resultados.csv
+    done
+done
