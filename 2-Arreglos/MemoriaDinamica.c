@@ -5,9 +5,9 @@
 #define ELIMINAR 2
 #define CONSULTAR 3
 #define SALIR 0
-#define MAX 101
-#define DESDE 10
-#define HASTA 99
+#define MAX 1001
+#define DESDE 1
+#define HASTA 9999
 #define AUSENTE -1
 #define DESOCUPADO -1
 #define ELIMINADO -1
@@ -62,7 +62,6 @@ int main(int argv, char** args){
     int faltas = 0; //indicador de numero de faltas de elemento o no presente en arreglo
     agregar = (float)a/100;
     eliminar = 1 - agregar - 0.1;
-    //arreglo = (int*)malloc(sizeof(int));
     for (r=0; r < repeticiones; r++){
         posicion = AUSENTE;
         #ifdef SIMULATION
