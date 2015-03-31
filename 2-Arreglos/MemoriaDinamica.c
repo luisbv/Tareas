@@ -53,7 +53,7 @@ int main(int argv, char** args){
     
     int elemento, posicion, desocupados;
     
-    srand(time(0));
+    srand(time(NULL)* getpid());
     
     
     int a;
