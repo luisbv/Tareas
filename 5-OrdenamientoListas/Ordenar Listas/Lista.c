@@ -45,6 +45,43 @@ void imprimirTodo (int* arreglo, int l){
     printf("\n");
 }
 
+
+int* Juntar(int* lista1, int* lista2, int l1, int l2){
+    int* juntas = NULL;
+    int len;
+    int i;
+    len = l1 + l2;
+    juntas = (int*)malloc(len*sizeof(int));
+    for (i = 0; i < l1; i++){
+        juntas[i] = lista1[i];
+    }
+    
+    for (i = l1; i < len; i++){
+        juntas[i] = lista2[i-l1];
+    }
+    return juntas;
+}
+
+
+void eliminar (int* lista, int l){
+    int* nueva = NULL;
+    int i;
+    nueva = (int*)malloc((l-1)*sizeof(int));
+    for (i=1; i < l; i++){
+        nueva[i-1] = lista[i];
+    }
+    free(lista);
+    lista = (int*)malloc((l-1)*sizeof(int));
+    for (i=0; i < (l-1); i++){
+        lista[i] = nueva[i];
+    }
+}
+
+void agregarElemento (int* lista, int l, int elemento){
+    lista = (int*)malloc((l+1)*sizeof(int));
+    lista[l] = elemento;
+}
+
 void selSort(int* lista, int l){
     int menor;
     int k;
@@ -70,19 +107,91 @@ void selSort(int* lista, int l){
 }
 
 
-int* mergeSort(int* arreglo, int l){
+int* mergeSort(int* lista, int l){
     int mitad;
+    int i, n, lenP, lenS;
+    n = 0;
     int* nueva = NULL;
+    int* nuevaP = NULL;
+    int* nuevaS = NULL;
     int* primero = NULL;
     int* segundo = NULL;
-    nueva = (int*)malloc(sizeof(int));
     if (l < 2){
-        return arreglo;
+        return lista;
     }
     else{
         mitad = l/2;
-        //primero = mergeSort(arreglo[0], l/2);
+        lenP = mitad;
+        lenS = l-mitad;
+        nuevaP = (int*)malloc(lenP * sizeof(int));
+        for (i=0; i < mitad;i++){
+            nuevaP[i] = lista[i];
+        }
+        primero = (int*)malloc(lenP * sizeof(int));
+        primero = mergeSort(nuevaP, lenP);
         
+        nuevaS = (int*)malloc(lenS * sizeof(int));
+        for (i=mitad; i < l;i++){
+            nuevaS[i-mitad] = lista[i];
+        }
+        segundo = (int*)malloc(lenS * sizeof(int));
+        segundo = mergeSort(nuevaS, lenS);
+        printf("Primero ");
+        imprimir(primero, lenP);
+        printf("Segundo ");
+        imprimir(segundo, lenS);
+        while (lenP > 0 || lenS > 0){
+            printf("Entro While \n");
+            if (lenP == 0){
+                printf("Entro mitad == 0 \n");
+                printf("Juntar ");
+                imprimir(Juntar(nueva,segundo, n, lenS), n+lenS);
+                return Juntar(nueva,segundo, n, lenS);
+                
+            }
+            else if (lenS == 0){
+                printf("Entro (l - mitad)== 0\n");
+                printf("Juntar ");
+                imprimir(Juntar(nueva,primero, n, lenP), n+lenP);
+                return Juntar(nueva,primero, n, lenP);
+            }
+            else if (primero[0]<segundo[0]){
+                printf("Entro primero < segundo");
+                //agregarElemento(nueva, n, primero[0]);
+                if (n == 0){
+                    nueva = (int*)malloc((n+1)*sizeof(int));
+                    nueva[n] = primero[0];
+                }
+                else{
+                    nueva = (int*)realloc(nueva,(n+1)*sizeof(int));
+                    nueva[n] = primero[0];
+                }
+                printf("nueva %d: %d primero %d\n",n,nueva[n], primero[0]);
+                eliminar(primero, lenP);
+                lenP--;
+                n++;
+            }
+            else{
+                printf("Entro segundo < primero ");
+                //agregarElemento(nueva, n, segundo[0]);
+                if (n == 0){
+                    nueva = (int*)malloc((n+1)*sizeof(int));
+                    nueva[n] = segundo[0];
+                }
+                else{
+                    nueva = (int*)realloc(nueva,(n+1)*sizeof(int));
+                    nueva[n] = segundo[0];
+                }
+                
+                printf("nueva %d: %d segundo %d\n",n,nueva[n], segundo[0]);
+                eliminar(segundo, lenS);
+                lenS--;
+                n++;
+            }
+            printf("Nueva ");
+            imprimir(nueva, n);
+        }
+        return nueva;
     }
 }
 
@@ -178,10 +287,11 @@ int main(int argv, char** args){
 }
 
     imprimir(arreglo,largo);
-    imprimirTodo(arreglo,largo);
-    selSort(arreglo,largo);
+    arreglo = mergeSort(arreglo, largo);
     imprimir(arreglo,largo);
-    imprimirTodo(arreglo,largo);
+    selSort(arreglo,largo);
+    
+    //imprimir(arreglo,largo);
     return 0;
 }
 
