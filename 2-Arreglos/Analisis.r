@@ -1,12 +1,11 @@
 #datos.txt
 
 library(plyr)
-d =read.csv(“resultados.csv”, sep =“,”)
 
-sink(“miresultado.txt”)
-count(d, “facu”)
-count(d, c(“facu”, “tipo”))
+#%Agregar,%Eliminar,Operaciones,NoEncontrados
+d =read.csv('resultados.csv', sep =',', header = FALSE)
 
-agregate (valor ~ facu, datos = d, sum)
 
-sink()
+boxplot(d$V3 ~ d$V1)
+
+boxplot(d$V4 ~ d$V1)
