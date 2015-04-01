@@ -147,6 +147,7 @@ int main(int argv, char** args){
                 scanf("%d", &elemento);
                 #endif
                 if (largo != 0) {
+
                     for (p=0; p < largo; p++){
                         if(arreglo[p] == elemento){
                             posicion = p;
