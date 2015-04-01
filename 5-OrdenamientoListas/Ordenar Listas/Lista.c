@@ -7,25 +7,20 @@
 #define SALIR 0
 #define MAX 101
 #define DESDE 0
-#define HASTA 9
+#define HASTA 100
 #define AUSENTE -1
 #define DESOCUPADO -1
 #define ELIMINADO -1
 
 // Kernighan & Ritchie ANSI C
 
-
-
 //#define MANUALTEST 40
 
 #define SIMULATION 41
-#define MAXIMO 10
+#define MAXIMO 100
 
 // #define IMPRIMIR 42
 //#define DEBUG 43
-
-
-
 
 
 void imprimir (int* arreglo, int l){
@@ -41,38 +36,35 @@ void imprimir (int* arreglo, int l){
     printf("\n");
 }
 
-void imprimir (int* arreglo, int* l){
+void imprimirTodo (int* arreglo, int l){
     int i;
-    int j=0;
     for (i=0; i < l; i++){
-        
-        if (arreglo[i] == DESOCUPADO){
-            break;
-        }
         printf("%d ",arreglo[i]);
 
     }
     printf("\n");
 }
 
-void selSort(int* arreglo, int l){
+void selSort(int* lista, int l){
     int menor;
     int k;
-    int temp=0;
+    int temp;
     int p, i;
-    for (i=0; i<l; i++){
+    p = 0;
+    temp = 0;
+    for (i=0; i < l; i++){
         k=-2;
         menor = MAXIMO + 1;
-        for (p=i; p<l;p++){
-            if (arreglo[p]<menor){
+        for (p = i; p < l; p++){
+            if (lista[p] < menor){
                 k = p;
-                menor = arreglo[p];
+                menor = lista[p];
             }
-        if (k != -2){
-            temp = arreglo[i];
-            arreglo[i] = arreglo[k];
-            arreglo[k] = temp;
         }
+        if (k != -2){
+            temp = lista[i];
+            lista[i] = lista[k];
+            lista[k] = temp;
         }
     }
 }
@@ -83,15 +75,13 @@ int* mergeSort(int* arreglo, int l){
     int* nueva = NULL;
     int* primero = NULL;
     int* segundo = NULL;
-    nueva = (int*)malloc(sizeof(int))
-    nu
-    if l < 2{
+    nueva = (int*)malloc(sizeof(int));
+    if (l < 2){
         return arreglo;
     }
     else{
         mitad = l/2;
-        primero = mergeSort(arreglo[0])
-        while()
+        //primero = mergeSort(arreglo[0], l/2);
         
     }
 }
@@ -188,8 +178,10 @@ int main(int argv, char** args){
 }
 
     imprimir(arreglo,largo);
+    imprimirTodo(arreglo,largo);
     selSort(arreglo,largo);
     imprimir(arreglo,largo);
+    imprimirTodo(arreglo,largo);
     return 0;
 }
 
