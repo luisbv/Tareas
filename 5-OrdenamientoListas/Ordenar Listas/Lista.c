@@ -196,29 +196,61 @@ int* mergeSort(int* lista, int l){
 }
 
 
-
-def quicksort(lista):
-    if len(lista) < 2:
-        return lista
-    else:
-        pivote = lista[0]
-        primero = list()
-        segundo = list()
-        for elemento in lista[1:]:
-            if elemento <= pivote:
-                primero.append(elemento)
-            else:
-                segundo.append(elemento)
-        if len(primero) == 0:
-            primero.append(pivote)
-        elif len(segundo) == 0:
-            segundo.append(pivote)
-        else:
-            primero.append(pivote)            
-        primero = quicksort(primero)
-        segundo = quicksort(segundo)
-        return primero + segundo
-
+int* quickSort(int* lista, int l){
+    int pivote;
+    int* primero = NULL;
+    int* segundo = NULL;
+    int i, nP, nS;
+    
+    if (l < 2){
+        return lista;
+    }
+    else{
+        pivote = lista[0];
+        nP=0;
+        nS=0;
+        for (i=1; i < l;i++){
+            if(lista[i] <= pivote){
+                if (nP == 0){
+                    primero = (int*)malloc((nP+1)*sizeof(int));
+                    primero[nP] = lista[i];
+                }
+                else{
+                    primero = (int*)realloc(primero,(nP+1)*sizeof(int));
+                    primero[nP] = lista[i];
+                }
+                nP++;
+            }else{
+                if (nS == 0){
+                    segundo = (int*)malloc((nS+1)*sizeof(int));
+                    segundo[nS] = lista[i];
+                }
+                else{
+                    segundo = (int*)realloc(segundo,(nS+1)*sizeof(int));
+                    segundo[nS] = lista[i];
+                }
+                nS++;
+            }
+        
+        }
+        if (nP == 0){
+            primero = (int*)malloc((nP+1)*sizeof(int));
+            primero[nP] = pivote;
+            nP++;
+        }else if (nS == 0){
+            segundo = (int*)malloc((nS+1)*sizeof(int));
+            segundo[nS] = pivote;
+            nS++;
+        }else{
+            primero = (int*)realloc(primero,(nP+1)*sizeof(int));
+            primero[nP] = pivote;
+            nP++;
+        }
+        primero = quickSort(primero, nP);
+        segundo = quickSort(segundo, nS);
+        return Juntar(primero, segundo, nP, nS);
+    }
+}
 
 
 void IndexQuickSort(int* lista, int desde, int hasta){
@@ -344,7 +376,8 @@ int main(int argv, char** args){
 }
 
     imprimir(arreglo,largo);
-    IndexQuickSort(arreglo, 0, largo - 1);
+    arreglo = quickSort(arreglo, largo); 
+    //IndexQuickSort(arreglo, 0, largo - 1);
     imprimir(arreglo,largo);
     //arreglo = mergeSort(arreglo, largo);
     //imprimir(arreglo,largo);
