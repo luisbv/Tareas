@@ -196,6 +196,26 @@ int* mergeSort(int* lista, int l){
 }
 
 
+def indexquicksort(lista, desde, hasta):
+    if hasta == desde:
+        return
+    d = desde
+    h = hasta
+    pivote = lista[d] # hay que congelar esto por ahora
+    desde += 1
+    while desde < hasta:
+        while desde < hasta and not lista[desde] >= pivote:
+            desde += 1
+        while desde < hasta and not lista[hasta] < pivote:
+            hasta -= 1
+        if desde < hasta:
+            (lista[desde], lista[hasta]) = (lista[hasta], lista[desde])
+    if lista[h] < pivote:
+        (lista[d], lista[h]) = (lista[h], lista[d]) # si pivote es el maximo (caso especial)
+    indexquicksort(lista, d, desde - 1)
+    indexquicksort(lista, hasta, h)
+    return
+
 int main(int argv, char** args){
 
     int* arreglo = NULL;
