@@ -195,6 +195,32 @@ int* mergeSort(int* lista, int l){
     }
 }
 
+
+
+def quicksort(lista):
+    if len(lista) < 2:
+        return lista
+    else:
+        pivote = lista[0]
+        primero = list()
+        segundo = list()
+        for elemento in lista[1:]:
+            if elemento <= pivote:
+                primero.append(elemento)
+            else:
+                segundo.append(elemento)
+        if len(primero) == 0:
+            primero.append(pivote)
+        elif len(segundo) == 0:
+            segundo.append(pivote)
+        else:
+            primero.append(pivote)            
+        primero = quicksort(primero)
+        segundo = quicksort(segundo)
+        return primero + segundo
+
+
+
 void IndexQuickSort(int* lista, int desde, int hasta){
     int d, h, pivote, temp;
     if (hasta == desde){
