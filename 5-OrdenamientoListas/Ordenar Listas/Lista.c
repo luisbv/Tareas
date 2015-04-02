@@ -195,26 +195,37 @@ int* mergeSort(int* lista, int l){
     }
 }
 
-
-def indexquicksort(lista, desde, hasta):
-    if hasta == desde:
-        return
-    d = desde
-    h = hasta
-    pivote = lista[d] # hay que congelar esto por ahora
-    desde += 1
-    while desde < hasta:
-        while desde < hasta and not lista[desde] >= pivote:
-            desde += 1
-        while desde < hasta and not lista[hasta] < pivote:
-            hasta -= 1
-        if desde < hasta:
-            (lista[desde], lista[hasta]) = (lista[hasta], lista[desde])
-    if lista[h] < pivote:
-        (lista[d], lista[h]) = (lista[h], lista[d]) # si pivote es el maximo (caso especial)
-    indexquicksort(lista, d, desde - 1)
-    indexquicksort(lista, hasta, h)
-    return
+void IndexQuickSort(int* lista, int desde, int hasta){
+    int d, h, pivote, temp;
+    if (hasta == desde){
+        return;
+    }
+    d = desde;
+    h = hasta;
+    pivote = lista[d]; // hay que congelar esto por ahora
+    desde += 1;
+    while (desde < hasta){
+        while (desde < hasta && lista[desde] < pivote){
+            desde += 1;
+        }
+        while (desde < hasta && lista[hasta] >= pivote){
+            hasta -= 1;
+        }
+        if (desde < hasta){
+            temp = lista[desde];
+            lista[desde] = lista[hasta];
+            lista[hasta] = temp; // si pivote es el maximo (caso especial)
+        }
+    }
+    if (lista[h] < pivote){
+        temp = lista[d];
+        lista[d] = lista[h];
+        lista[h] = temp; //si pivote es el maximo (caso especial)
+    }
+    IndexQuickSort(lista, d, desde - 1);
+    IndexQuickSort(lista, hasta, h);
+    return;
+}
 
 int main(int argv, char** args){
 
@@ -307,9 +318,11 @@ int main(int argv, char** args){
 }
 
     imprimir(arreglo,largo);
-    arreglo = mergeSort(arreglo, largo);
+    IndexQuickSort(arreglo, 0, largo - 1);
     imprimir(arreglo,largo);
-    selSort(arreglo,largo);
+    //arreglo = mergeSort(arreglo, largo);
+    //imprimir(arreglo,largo);
+    //selSort(arreglo,largo);
     
     //imprimir(arreglo,largo);
     return 0;
