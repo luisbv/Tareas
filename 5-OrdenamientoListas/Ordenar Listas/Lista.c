@@ -23,6 +23,22 @@
 //#define DEBUG 43
 
 
+void shuffle(int* lista, int n)
+{
+    int i, j, t;
+    if (n > 1) 
+    {
+        for (i = 0; i < n - 1; i++) 
+        {
+          j = i + rand() % (n - i);
+          t = lista[j];
+          lista[j] = lista[i];
+          lista[i] = t;
+        }
+    }
+}
+
+
 void imprimir (int* arreglo, int l){
     int i;
     for (i=0; i < l; i++){
@@ -75,12 +91,9 @@ void eliminar (int* lista, int l){
     for (i=0; i < (l-1); i++){
         lista[i] = nueva[i];
     }
+    free(nueva);
 }
 
-void agregarElemento (int* lista, int l, int elemento){
-    lista = (int*)malloc((l+1)*sizeof(int));
-    lista[l] = elemento;
-}
 
 void selSort(int* lista, int l){
     int menor;
@@ -110,7 +123,6 @@ void selSort(int* lista, int l){
 int* mergeSort(int* lista, int l){
     int mitad;
     int i, n, lenP, lenS;
-    n = 0;
     int* nueva = NULL;
     int* nuevaP = NULL;
     int* nuevaS = NULL;
@@ -136,28 +148,15 @@ int* mergeSort(int* lista, int l){
         }
         segundo = (int*)malloc(lenS * sizeof(int));
         segundo = mergeSort(nuevaS, lenS);
-        printf("Primero ");
-        imprimir(primero, lenP);
-        printf("Segundo ");
-        imprimir(segundo, lenS);
+        n = 0;
         while (lenP > 0 || lenS > 0){
-            printf("Entro While \n");
             if (lenP == 0){
-                printf("Entro mitad == 0 \n");
-                printf("Juntar ");
-                imprimir(Juntar(nueva,segundo, n, lenS), n+lenS);
-                return Juntar(nueva,segundo, n, lenS);
-                
+                return Juntar(nueva,segundo, n, lenS); 
             }
             else if (lenS == 0){
-                printf("Entro (l - mitad)== 0\n");
-                printf("Juntar ");
-                imprimir(Juntar(nueva,primero, n, lenP), n+lenP);
                 return Juntar(nueva,primero, n, lenP);
             }
-            else if (primero[0]<segundo[0]){
-                printf("Entro primero < segundo");
-                //agregarElemento(nueva, n, primero[0]);
+            else if (primero[0] < segundo[0]){
                 if (n == 0){
                     nueva = (int*)malloc((n+1)*sizeof(int));
                     nueva[n] = primero[0];
@@ -166,14 +165,11 @@ int* mergeSort(int* lista, int l){
                     nueva = (int*)realloc(nueva,(n+1)*sizeof(int));
                     nueva[n] = primero[0];
                 }
-                printf("nueva %d: %d primero %d\n",n,nueva[n], primero[0]);
                 eliminar(primero, lenP);
                 lenP--;
                 n++;
             }
             else{
-                printf("Entro segundo < primero ");
-                //agregarElemento(nueva, n, segundo[0]);
                 if (n == 0){
                     nueva = (int*)malloc((n+1)*sizeof(int));
                     nueva[n] = segundo[0];
@@ -182,14 +178,10 @@ int* mergeSort(int* lista, int l){
                     nueva = (int*)realloc(nueva,(n+1)*sizeof(int));
                     nueva[n] = segundo[0];
                 }
-                
-                printf("nueva %d: %d segundo %d\n",n,nueva[n], segundo[0]);
                 eliminar(segundo, lenS);
                 lenS--;
                 n++;
             }
-            printf("Nueva ");
-            imprimir(nueva, n);
         }
         return nueva;
     }
@@ -291,7 +283,7 @@ int main(int argv, char** args){
     int* nuevo = NULL;
 
     int largo = 0;
-    int inicial = 8;
+    
     
     float agregar = 1;
     float pdesocupados = 0.0; //porcentaje desocupados
@@ -302,6 +294,7 @@ int main(int argv, char** args){
     
     #ifdef SIMULATION
     repeticiones = atoi(args[1]);
+    int inicial = atoi(args[1]);
     #endif
     
     #ifdef MANUALTEST
@@ -374,16 +367,26 @@ int main(int argv, char** args){
                 break;
         }
 }
-
     imprimir(arreglo,largo);
-    arreglo = quickSort(arreglo, largo); 
-    //IndexQuickSort(arreglo, 0, largo - 1);
+    printf("MergeSort\n");
+    arreglo = mergeSort(arreglo, largo);
     imprimir(arreglo,largo);
-    //arreglo = mergeSort(arreglo, largo);
-    //imprimir(arreglo,largo);
-    //selSort(arreglo,largo);
-    
-    //imprimir(arreglo,largo);
+    shuffle(arreglo, largo);
+    imprimir(arreglo,largo);
+    printf("IndexQuickSort\n");
+    IndexQuickSort(arreglo, 0, largo - 1);
+    imprimir(arreglo,largo);
+    shuffle(arreglo, largo);
+    imprimir(arreglo,largo);
+    printf("QuickSort\n");
+    arreglo = quickSort(arreglo, largo);
+    imprimir(arreglo,largo);
+    shuffle(arreglo, largo);
+    imprimir(arreglo,largo);
+    printf("SelectSort\n");
+    selSort(arreglo,largo);
+    imprimir(arreglo,largo);
+    free(arreglo);
     return 0;
 }
 
