@@ -53,8 +53,6 @@ class nodo:
             maximo = max(valor, self.valor)
             if self.padre is not None:
                 self.prof = self.padre.prof + 1
-
-
             self.izq = nodo(minimo, self)
             self.der = nodo(maximo, self)
             return True #Hubo cambios en la hoja

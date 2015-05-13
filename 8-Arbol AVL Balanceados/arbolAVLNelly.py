@@ -45,21 +45,30 @@ def rotarD(nodo, a_izq):
         return nodo
         
 def balancear(nodo):
+        #print nodo
         if (not nodo): return
+        print "Dato",nodo.dato
         if altura(nodo.izq) - altura(nodo.der) == 2:
+                print "desequilibrio hacia la izquierda"
                 #desequilibrio hacia la izquierda
                 if altura(nodo.izq.izq) >= altura(nodo.izq.der):
+                        print "desequilibrio simple a la izq"
                         #desequilibrio simple a la izq
+                        
                         nodo = rotarS(nodo, True)
                 else:
+                        print "desequilibrio doble a la izquierda"
                         #desequilibrio doble a la izquierda
                         nodo = rotarD(nodo, True)
         elif altura(nodo.der) - altura(nodo.izq) == 2:
                 #desequilibrio hacia la derecha
+                print "desequilibrio hacia la derecha"
                 if altura(nodo.der.der) >= altura(nodo.der.izq): 
+                        print "desequilibrio simple hacia la derecha"
                         #desequilibrio simple hacia la derecha
                         nodo = rotarS(nodo, False)
                 else:
+                        print "desequilibrio doble hacia la derecha"
                         #desequilibrio doble hacia la derecha
                         nodo = rotarD(nodo, False)
         return nodo
@@ -76,15 +85,6 @@ def insertar(nodo, dato):
                 actualizarAltura(nodo)
         return nodo
 
-raiz = None
-import sys
-def sins(dato): #insertar dato 
-        global raiz
-        raiz = insertar(raiz, dato)
-        
-for i in xrange(12):
-        sins(random.randint(5,1000))
-        
 space = 5
 
 def lvlnode(nodo, dlvl, lvl =0):
@@ -98,7 +98,7 @@ def lvlnode(nodo, dlvl, lvl =0):
                 nodes += lvlnode(izq, dlvl, lvl+1)
                 nodes += lvlnode(der, dlvl, lvl+1)
                 return nodes 
-        
+
 def mostrar(raiz):
         p = sys.stdout.write
         width = (2**(raiz.altura))*space
@@ -113,4 +113,23 @@ def mostrar(raiz):
                         p(" " *tspaces)
                 p("\n")
                 
-mostrar(raiz)
+
+
+raiz = None
+import sys
+def sins(dato): #insertar dato 
+        global raiz
+        raiz = insertar(raiz, dato)
+        
+#for i in xrange(12):
+#        sins(random.randint(5,1000))
+
+valores = [10,52,94,45,40,14,11,41,48]
+for i in xrange(len(valores)):
+    if i != 0:
+        print "A %d" % valores[i]
+    sins(valores[i])
+    if i != 0:
+        mostrar(raiz)
+
+

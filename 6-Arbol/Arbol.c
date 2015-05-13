@@ -3,7 +3,7 @@
 #include <stdlib.h> // malloc & free
 
 
-#define MAXIMO 100
+#define MAXIMO 10
 
 typedef struct nodoDeArbol {
   int valor;
@@ -19,23 +19,23 @@ typedef struct arbolEnlazado {
 
 int main(int argv, char** args){
     
-  arbol* a = (arbol*)malloc(sizeof(arbol));
-  a->raiz = NULL;
-  nodo** aux = (nodo**)malloc(sizeof(arbol)*8);
-  nodo* n = NULL;
+    arbol* a = (arbol*)malloc(sizeof(arbol));
+    a->raiz = NULL;
+    nodo** aux = (nodo**)malloc(sizeof(arbol)*8);
+    nodo* n = NULL;
 
-  n = (nodo*)malloc(sizeof(nodo));
+    n = (nodo*)malloc(sizeof(nodo));
 
-  e->valor = 0;
-  e->padre = NULL;
+    n->valor = 0;
+    n->padre = NULL;
+    n->numeroDeHijos = 2;
+    n->hijos = (nodo**)malloc(sizeof(nodo));
+    n->hijos[0]->valor = 3;
+    n->hijos[1]->valor = 2;
 
-  e->hijos = (nodo**)malloc(sizeof(2*nodo));
-  e->hijos[0] = 3;
-  e->hijos[1] = 2;
-  e->numeroDeHijos = 2;
-  
-  
-  return 0;
+    printf("hola\n");
+
+    return 0;
 }
 
 
