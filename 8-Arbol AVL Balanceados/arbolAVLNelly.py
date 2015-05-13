@@ -17,7 +17,7 @@ def altura(nodo):
 
 def actualizarAltura(nodo):
         if (not nodo): return
-        nodo.altura = max(altura(nodo.izq), altura(nodo.der)) +1
+        nodo.altura = max(altura(nodo.izq), altura(nodo.der)) + 1
 
 def rotarS(nodo, a_izq): #rotaciones y actualizacion de las alturas
         #Rotar simple

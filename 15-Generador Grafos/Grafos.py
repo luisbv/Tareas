@@ -1,6 +1,12 @@
 from random import choice, random, randint
 from math import sqrt
 from itertools import product
+import os
+
+def shell(script):
+    ''' lol '''
+    os.system("bash -c '%s'" % script)
+
 
 def Gnp(n = 10, p = 0.5):
     E = list()
@@ -99,7 +105,7 @@ def Prim(n=10):
             j = d[i][0][0]
         if (i,j) not in E and (j,i) not in E and i != j:
             E.append((i,j))
-    return E
+    return E, coord
 
 
 def hipergrafo(dim=3):
@@ -131,47 +137,132 @@ def aristasDat(E, Coord):
         print >>file, '%.5f %.5f %.5f %.5f' % (x1, y1, dx, dy)
     file.close()
 
+def NodosAdyacentes(E,Coord):
+    Ady = list()
+    for i in xrange(len(Coord)):
+        temp=list()
+        for arista in E:
+            if arista[0] == i:
+                temp.append(arista[1])
+            elif arista[1] == i:
+                temp.append(arista[0])
+            else:
+                continue
+        Ady.append(temp)
+    return Ady
 
+def acomodarNodos(E, Coord):
+    #nodos que tienen aristas en comun tienden a estar 
+    #cerca y nodos que no tienen arista en comun lejos
+    #distancia de vecino y distancia de no vecino
+    #si me encuentro cerca de la distancia repelo
+    #hacer como suma de fuerzas
+    #alfa F alfa entre 0 y 1
 
+    n = 20 # distancia de no adyacencia
+    v = 10 # distancia de adyacencia
+
+    nodosAdyacentes = NodosAdyacentes(E,Coord)
+
+    epsilon = 1
+    stop = True
+    iter = 0
+    maxiter = 500
+    while stop:
+        iter += 1
+        i = 0
+        error = 0
+        while i < len(Coord):
+            dv = 0
+            dn = 0
+            xv = 0
+            yv = 0
+            xn = 0
+            yn = 0
+            for j in nodosAdyacentes[i]:
+                d = Euclidiana(Coord[i],Coord[j]) #distancia entre nodos
+                xv += Coord[j][0] - Coord[i][0]
+                yv += Coord[j][1] - Coord[i][1]
+                error += abs(d-v)
+                if d > v:
+                    dv -= d - v
+        
+            temp = list()
+            for j in xrange(len(Coord)):
+                if j not in nodosAdyacentes[i]:
+                    temp.append(j)
+
+            for j in temp:
+                d = Euclidiana(Coord[i],Coord[j]) #distancia entre nodos
+                xn += Coord[j][0] - Coord[i][0]
+                yn += Coord[j][1] - Coord[i][1]
+                if d < n:
+                    dn += n - d
+
+        
+            alfax = random() * float(yv - yn)/(xv - xn)
+            alfay = random() * float(yv - yn)/(xv - xn)
+            x = Coord[i][0] + alfax
+            y = Coord[i][1] + alfay
+            Coord[i] = (x,y)
+        
+            i += 1
+        if error <= epsilon or iter == maxiter:
+            stop = False
+        
+
+    return Coord
 #vector
 #x y dx dy
 #head flechas
 #no head puras lineas
 
-print "Gnp"
-print Gnp()
+# print "Gnp"
+# print Gnp()
+# 
+# print
+# print
+# print "Gnm"
+# print Gnm()
+# 
+# print
+# print
+# print "geom"
+# C,a = geom()
+# print C
+# 
+# 
+# print 
+# print
+# print "unionFind"
+# print unionFind(len(C),C)
+# 
+# 
+# print
+# print
+# 
+# print "PRIM"
+# print Prim()
+# 
+# print
+# print
+# print hipergrafo()
+nodos = 10
+aristas, Coord = Gnp(nodos), Coordenadas(nodos)
 
-print
-print
-print "Gnm"
-print Gnm()
-
-print
-print
-print "geom"
-C,a = geom()
-print C
-
-
-print 
-print
-print "unionFind"
-
-print unionFind(len(C),C)
-
-
-print
-print
-
-print "PRIM"
-print Prim()
-
-print
-print
-print hipergrafo()
-
-nodos, Coord = geom()
 nodosDat(Coord)
-aristasDat(nodos, Coord)
+aristasDat(aristas, Coord)
 
+#Desacomodados
+print Coord
+shell('gnuplot plotDes.gnu')
 
+#Acomodados
+Coord = acomodarNodos(aristas, Coord)
+print Coord
+nodosDat(Coord)
+aristasDat(aristas, Coord)
+shell('gnuplot plotO.gnu')
+
+shell('open GraficaDes.eps')
+shell('open GraficaO.eps')

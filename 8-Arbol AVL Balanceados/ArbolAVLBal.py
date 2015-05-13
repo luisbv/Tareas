@@ -4,7 +4,6 @@ class nodo:
     def __init__(self, valor, p=None, a=1):
         self.valor = valor
         self.altura = a
-        self.claves = None
         self.padre = p
         if self.padre is None:
             self.prof = 0
@@ -15,23 +14,23 @@ class nodo:
         self.hoja = True
 
     def recorre(self, prof=0):
-    	if not self.hoja:
-    		print 'R %d @ %d  ---> I %d :: D %d' % (self.valor, self.prof, self.izq.valor, self.der.valor)
-        	self.izq.recorre(self.izq.prof)
-        	self.der.recorre(self.izq.prof)
-        	return
+        if not self.hoja:
+            print 'R %d @ %d  ---> I %d :: D %d' % (self.valor, self.prof, self.izq.valor, self.der.valor)
+            self.izq.recorre(self.izq.prof)
+            self.der.recorre(self.izq.prof)
+            return
         else:
-        	if self.padre.izq == self:
-        		if self.padre.der.hoja:
-        			return
-        		else:
-    				self.padre.der.recorre(self.padre.der.prof)
-    		else:
-    			if self.padre.izq.hoja:
-        			return
-        		else:
-    				self.padre.izq.recorre(self.padre.izq.prof)
-        	return
+            if self.padre.izq == self:
+                if self.padre.der.hoja:
+                    return
+                else:
+                    self.padre.der.recorre(self.padre.der.prof)
+            else:
+                if self.padre.izq.hoja:
+                    return
+                else:
+                    self.padre.izq.recorre(self.padre.izq.prof)
+            return
 
     def buscar(self, valor):
         if self.valor  == valor:
@@ -44,40 +43,31 @@ class nodo:
             return self.der.buscar(valor)
 
     def agregar(self, valor):
+        print self.valor
         if self.valor == valor:
             print '%d Rep' % valor
             return
         if self.hoja:
             self.hoja = False
-            minimo = min(valor, self.valor)
-            maximo = max(valor, self.valor)
-            if self.padre is not None:
-                self.prof = self.padre.prof + 1
-
-
-            self.izq = nodo(minimo, self)
-            self.der = nodo(maximo, self)
+            if valor < self.valor:
+                self.izq = nodo(valor, self)
+            else:
+                self.der = nodo(valor, self)
             return True #Hubo cambios en la hoja
         else:
             if (valor < self.valor):
-
-                cambio = self.izq.agregar(valor)
-                self.actualizar(cambio)
+                c = self.izq.agregar(valor)
                 #Aqui puedo poner algo y me quedo en donde esta el return
             else:
-
-                self.der.agregar(valor)
+                c = self.der.agregar(valor)
+            self.balancear()
+            self.actualizar(c)
 
     def actualizar(self, cambio):
-        if self.padre is None:
-            self.altura += 1
-            self.clave = max(self.izq.altura, self.der.altura)
+        if cambio is None: 
             return
         if cambio:
-            self.padre.altura += 1
-            #self.padre.padre.balance()
-            self.clave = max(self.padre.izq.altura, self.padre.der.altura)
-            self.padre.actualizar(cambio)
+            self.altura = max(alturaN(self.izq), alturaN(self.der))
         return
 
     def hermano(self):
@@ -113,18 +103,64 @@ class nodo:
             else:
                 return self.der.eliminar(valor)
 
+    
+    def balancear(self):
+        if self is None: return
 
-    def balance(self):
-    	b = abs(self.izq.altura - self.der.altura)
-    	minimo = min(self.izq.altura, self.der.altura)
-    	maximo = max(self.izq.altura, self.der.altura)
-    	if b > 1 :
-    		print 'No esta balanceado'
-    		#self.padre.balance()
-    	else:
-    		print 'Esta balanceado'
-    		return
 
+        b = abs(alturaN(self.izq) - alturaN(self.der))
+        minimo = min(alturaN(self.izq), alturaN(self.der))
+        maximo = max(alturaN(self.izq), alturaN(self.der))
+    
+        if b > 1 :
+            print 'No esta balanceado'
+            if alturaN(self.izq) == maximo:
+                if alturaN(self.izq.izq) >= alturaN(self.izq.der):
+                    self.rotarS(True)
+                else:
+                    self.rotarD(True)
+            else:
+                if alturaN(self.der.der) >= alturaN(self.der.izq):
+                    self.rotarS(False)
+                else:
+                    self.rotarD(False)
+        else:
+            print 'Esta balanceado'
+            return
+
+
+
+    def rotarD(self, Nizq):
+        if Nizq:
+            self.izq.rotarS(False)
+            self.rotarS(True)
+        else:
+            self.der.rotarS(True)
+            self.rotarS(False)
+        return
+
+    def rotarS(self, Nizq):
+        x = None
+        c = None
+        if Nizq:
+            x = self.izq
+            self.izq = x.der
+            x.der = self
+            c = True
+        else:
+            x = self.der
+            self.der = x.izq
+            x.izq = self.der
+            c = True
+        self.actualizar(c)
+        x.actualizar(c)
+        return x
+
+def alturaN(nodo):
+        if nodo is None:
+            return -1
+        else:
+            return nodo.altura
 
 raiz = nodo(10)
 print 'Raiz %d ' % raiz.valor
