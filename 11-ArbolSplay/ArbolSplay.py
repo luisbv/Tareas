@@ -1,28 +1,55 @@
 
 class nodo:
     def __init__(self, c=None, p=None):
-
-        self.claves = c
+        self.clave = c
         self.padre = p
         self.izq = None
         self.der = None
+        self.hoja = True
 
-    def splay(self,l):
+    def agregar(self, c):
+        if self.hoja:
+            self.hoja = False
+            if c < self.clave:
+                self.izq = nodo(c, self)
+            else:
+                self.der = nodo(c, self)
+        else:
+            if (c < self.clave):
+                if self.izq is not None:
+                    self.izq.agregar(c)
+                else:
+                    self.hoja = False
+                    self.izq = nodo(c, self)
+            else:
+                if self.der is not None:
+                    self.der.agregar(c)
+                else:
+                    self.hoja = False
+                    self.der = nodo(valor,self)
+
+    def splay(self, c):
+        self.agregar(c)
+        print "Paso agregar"
+        if self.padre is None: return
+        print "Paso padre"
+        if self.padre.padre is None: return
+        print "Paso abuelo"
         x = self
         p = self.padre
         q = self.padre.padre
 
-        if x == p.izq:
+        if x.clave == p.izq.clave:
             x.RSI(p)
-        elif x == p.der:
+        elif x.clave == p.der.clave:
             x.RSD(p)
-        elif x == p.izq and p == q.izq:
+        elif x.clave == p.izq.clave and p.clave == q.izq.clave:
             x.RDD(p,q)
-        elif x == p.der and p == q.der:
+        elif x.clave == p.der.clave and p.clave == q.der:
             x.RDI(p,q)
-        elif x == p.izq and p = q.der:
+        elif x == p.izq and p == q.der:
             x.RSDI(p,q)
-        elif x == p.der and p = q.izq:
+        elif x == p.der and p == q.izq:
             x.RSID(p,q)
 
     # Rotacion simple derecha
@@ -118,4 +145,8 @@ class nodo:
 
 raiz = nodo(10)
 
-print raiz
+raiz.splay(11)
+raiz.splay(12)
+raiz.splay(13)
+raiz.splay(13)
+print raiz.der.der.clave
