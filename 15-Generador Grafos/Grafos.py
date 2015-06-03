@@ -159,16 +159,15 @@ def acomodarNodos(E, Coord):
     #hacer como suma de fuerzas
     #alfa F alfa entre 0 y 1
 
-    n = 15 # distancia de no adyacencia
+    n = 20 # distancia de no adyacencia
     v = 10 # distancia de adyacencia
 
-    
     nodosAdyacentes = NodosAdyacentes(E,Coord)
 
-    epsilon = 0.0001
+    epsilon = 1
     stop = True
     iter = 0
-    maxiter = 5000
+    maxiter = 500
     while stop:
         iter += 1
         i = 0
@@ -184,7 +183,7 @@ def acomodarNodos(E, Coord):
                 d = Euclidiana(Coord[i],Coord[j]) #distancia entre nodos
                 xv += Coord[j][0] - Coord[i][0]
                 yv += Coord[j][1] - Coord[i][1]
-                error += (d**2-v**2)
+                error += abs(d-v)
                 if d > v:
                     dv -= d - v
         
